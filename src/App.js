@@ -48,7 +48,7 @@ function ApiRequestData() {
   const DopingColor = "rgb(31, 119, 180)";
   const width = 800;
   const height = 600;
-  const padding = 30;
+  const padding = 40;
 
   const drawScatterPlot = () => {
 
@@ -58,8 +58,11 @@ function ApiRequestData() {
       // .domain([0 , data.length - 1])
       .range([padding,  width - padding])
     
-    const xAxis = d3.axisBottom(xScale)
+    const yScale = d3.scaleTime()
+      .range([padding, height - padding])
 
+    const xAxis = d3.axisBottom(xScale)
+    const yAxis = d3.axisLeft(yScale)
 
     const svg = d3.select('#scatterContainer')
       .append("svg")
@@ -75,11 +78,17 @@ function ApiRequestData() {
         .attr('cy', (d, i)=> 600 - parseInt(d.Time, 10) * 10) // d.Time
         .attr('r', 4)
         .attr('fill', (d)=> {return d.Doping? DopingColor : noDopingColor})
-
+        .attr('class', 'dot')
+  
       svg.append('g')
         .call(xAxis)
         .attr('id', "x-axis")
         .attr('transform', `translate(0, ${height - padding})`)
+
+      svg.append('g')
+        .call(yAxis)
+        .attr('id', 'y-axis')
+        .attr('transform', `translate(${padding}, 0)`)
   }
 
   return (

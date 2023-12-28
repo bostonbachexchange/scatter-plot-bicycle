@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/scatter-plot-bicycle/static/css/main.2e4cc3c4.css",
-    "main.js": "/scatter-plot-bicycle/static/js/main.150be3c2.js",
+    "main.css": "/scatter-plot-bicycle/static/css/main.d5b7a62c.css",
+    "main.js": "/scatter-plot-bicycle/static/js/main.557631ba.js",
     "static/js/787.571daac5.chunk.js": "/scatter-plot-bicycle/static/js/787.571daac5.chunk.js",
     "index.html": "/scatter-plot-bicycle/index.html",
-    "main.2e4cc3c4.css.map": "/scatter-plot-bicycle/static/css/main.2e4cc3c4.css.map",
-    "main.150be3c2.js.map": "/scatter-plot-bicycle/static/js/main.150be3c2.js.map",
+    "main.d5b7a62c.css.map": "/scatter-plot-bicycle/static/css/main.d5b7a62c.css.map",
+    "main.557631ba.js.map": "/scatter-plot-bicycle/static/js/main.557631ba.js.map",
     "787.571daac5.chunk.js.map": "/scatter-plot-bicycle/static/js/787.571daac5.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.2e4cc3c4.css",
-    "static/js/main.150be3c2.js"
+    "static/css/main.d5b7a62c.css",
+    "static/js/main.557631ba.js"
   ]
 }

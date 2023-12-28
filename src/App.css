@@ -25,3 +25,13 @@ svg {
   padding: 0;
   margin: 12px;
 }
+
+#tooltip {
+  visibility: hidden;
+  width: auto;
+  height: auto;
+}
+
+.dot:hover {
+  fill: rgb(160, 249, 127);
+}

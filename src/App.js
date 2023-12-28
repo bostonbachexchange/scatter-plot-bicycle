@@ -61,15 +61,22 @@ function App() {
 
     const xScale = d3
       .scaleLinear()
-      // .domain([0 , data.length - 1])
-      // l;akjdsf
-
+      .domain([d3.min(data, (d)=> d.Year - 1) , d3.max(data, (d)=> d.Year + 1)])
       .range([padding, width - padding]);
 
-    const yScale = d3.scaleTime().range([padding, height - padding]);
+    const yScale = d3
+      .scaleTime()
+      .domain([d3.min(data, (d)=> {return new Date(d.Seconds * 1000)}), d3.max(data, (d)=> {return new Date(d.Seconds * 1000)})])
+      .range([padding, height - padding]);
 
-    const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale);
+    const xAxis = d3.axisBottom(xScale)
+      .tickFormat(d3.format('d'));
+
+    const yAxis = d3.axisLeft(yScale)
+      .tickFormat(d3.timeFormat("%M:%S"));
+
+    const tooltip = d3
+      .select('#tooltip')
 
     const svg = d3
       .select("#scatterContainer")
@@ -83,15 +90,36 @@ function App() {
       .data(data)
       .enter()
       .append("circle")
-      .attr("cx", (d, i) => i * 10) // d.Year
-      .attr("cy", (d, i) => 600 - parseInt(d.Time, 10) * 10) // d.Time
-      .attr("r", 4)
+      .attr("cx", (d, i) => xScale(d.Year)) // d.Year
+      .attr("cy", (d, i) => yScale(new Date(d.Seconds * 1000))) // d.Time
+      .attr("r", 6)
       .attr("fill", (d) => {
         return d.Doping ? DopingColor : noDopingColor;
       })
       .attr("class", "dot")
-      .attr("data-xvalue", (d) => d)
-      .attr("data-yvalue", (d) => d);
+      .attr("data-xvalue", (d) => d.Year)
+      .attr("data-yvalue", (d) => {return new Date(d.Seconds * 1000)})
+      .on('mouseover', (event, d)=> {
+        tooltip.transition()
+          .style('visibility', 'visible')
+          .attr('data-year', d.Year)
+          
+        tooltip.html(`<div >
+          <b>Doping:</b> ${d.Doping} <br />
+          <b>Name:</b> ${d.Name} <br />
+          <b>Place:</b> ${d.Place} <br />
+          <b>Nationality:</b> ${d.Nationality} <br />
+          <b>Seconds:</b> ${d.Secons} <br />
+          <b>Time:</b> ${d.Time} <br />
+          <b>Url:</b> ${d.URL} <br />
+          <b>Year:</b> ${d.Year} <br />
+          <br />
+        </div>`)
+      })
+      .on("mouseout", (event, d)=> {
+        tooltip.transition()
+        .style("visibility", "hidden")
+      })
 
     svg
       .append("g")
@@ -104,6 +132,28 @@ function App() {
       .call(yAxis)
       .attr("id", "y-axis")
       .attr("transform", `translate(${padding}, 0)`);
+
+      // Add legend in the middle of the SVG
+      d3.select("#scatterContainer")
+        .append("div")
+        .attr("id", "legend")
+        .html(
+          `<div style="border: 1px solid black; border-radius: 3px">
+            <div style="display: flex; align-items: center; margin-right: 0px; width: 100%;">
+              <p >No doping allegations  </p>
+              <div style="display: inline-block; width: 20px; height: 20px; background-color: orange;"></div>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <p>Riders with doping allegations</p>
+              <div style="display: inline-block; width: 20px; height: 20px; background-color: blue;"></div>
+            </div>
+        </div>`
+        )
+        .style("position", "absolute")
+        .style("top", `${height/ 1.5}px`)
+        .style("left", `${width}px`)
+        .style("transform", `translate(-50%, -50%)`); 
+
   };
 
   return (
@@ -111,7 +161,8 @@ function App() {
       <h1 id="title">Doping in Professional Bicycle Racing</h1>
       <p id="subTitle">35 Fastest times up Alpe d'Huez</p>
       <div id="scatterContainer"></div>
-      <ApiRequestData />
+      <div id='tooltip'></div>
+      {/* <ApiRequestData /> */}
     </div>
   );
 }

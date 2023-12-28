@@ -6,6 +6,7 @@
   font-size: 19px;
   font-family: sans-serif;
   font-weight: 600;
+  margin-top: 15px;
   margin-bottom: 0;
   color: rgb(31, 119, 180);
 }
@@ -27,11 +28,106 @@ svg {
 }
 
 #tooltip {
+  position: absolute;
   visibility: hidden;
-  width: auto;
-  height: auto;
+  background-color: #333;
+  opacity: 0.8;
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  font-family: 'Arial, sans-serif';
+  font-size: 14px;
+  line-height: 1.5;
+  pointer-events: none;
 }
+
+/* App.css */
+
+.ApiRequestData {
+  padding: 30px;
+  margin: 20px 0;
+}
+
+.ApiRequestDataTitle {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+.ApiRequestDataItem {
+  margin-bottom: 20px;
+}
+
+.ApiRequestDataLabel {
+  font-weight: bold;
+  margin-right: 15px;
+  width: 120px;
+  display: inline-block;
+  color: #555555;
+}
+
+.ApiRequestDataValue {
+  display: inline-block;
+  color: #333333;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.ApiRequestDataLink {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.ApiRequestDataLink:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
 
 .dot:hover {
   fill: rgb(160, 249, 127);
+}
+
+#legend {
+  font-family: 'Arial', sans-serif;
+}
+
+.legend-box {
+  /* border: 1px solid #555; */
+  border-radius: 5px;
+  padding: 10px;
+  /* background-color: #f9f9f9; */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.legend-color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  border: 1px solid #555;
+}
+
+.legend-item p {
+  margin: 0;
+  color: #333;
+}
+
+.legend-text {
+  /* margin: 0; */
+  color: #333;
+  /* line-height: 20px; Adjust this value to control the vertical alignment */
+  /* flex-grow: 1; */
+  /* overflow: hidden; */
+  white-space: nowrap;
+  /* border: 1px solid black; */
 }

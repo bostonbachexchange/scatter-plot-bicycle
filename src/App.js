@@ -26,29 +26,58 @@ function App() {
     }
   }, [data]);
 
-  function ApiRequestData() {
-    return (
-      <>
-        <div>
-          {data
-            ? data.map((item, i) => (
-                <div key={i}>
-                  <b>Doping:</b> {item.Doping} <br />
-                  <b>Name:</b> {item.Name} <br />
-                  <b>Place:</b> {item.Place} <br />
-                  <b>Nationality:</b> {item.Nationality} <br />
-                  <b>Seconds:</b> {item.Secons} <br />
-                  <b>Time:</b> {item.Time} <br />
-                  <b>Url:</b> {item.URL} <br />
-                  <b>Year:</b> {item.Year} <br />
-                  <br />
-                </div>
-              ))
-            : null}
-        </div>
-      </>
-    );
-  }
+// Inside the ApiRequestData component
+function ApiRequestData() {
+  return (
+    <div className="ApiRequestData">
+      <p className="ApiRequestDataTitle">Cyclist Information</p>
+      {data ? (
+        data.map((item, i) => (
+          <div className="ApiRequestDataItem" key={i}>
+            <div className="ApiRequestDataHeader">
+              <h2>{item.Name}</h2>
+              <p>{item.Year}</p>
+            </div>
+
+            <div className="ApiRequestDataContent">
+
+              { item.Doping && 
+              <p>
+                <span className="ApiRequestDataLabel">Doping:</span>
+                <span className="ApiRequestDataValue">{item.Doping}</span>
+              </p>
+              }
+              <p>
+                <span className="ApiRequestDataLabel">Place:</span>
+                <span className="ApiRequestDataValue">{item.Place}</span>
+              </p>
+
+              <p>
+                <span className="ApiRequestDataLabel">Nationality:</span>
+                <span className="ApiRequestDataValue">{item.Nationality}</span>
+              </p>
+
+              <p>
+                <span className="ApiRequestDataLabel">Time:</span>
+                <span className="ApiRequestDataValue">{item.Time}</span>
+              </p>
+
+              {item.URL && <p>
+                <span className="ApiRequestDataLabel">Url:</span>
+                <a className="ApiRequestDataLink" href={item.URL} target="_blank" rel="noopener noreferrer">
+                  {item.URL}
+                </a>
+              </p>}
+            </div>
+          </div>
+        ))
+      ) : (
+        <p>No data available</p>
+      )}
+    </div>
+  );
+}
+
 
   const noDopingColor = "rgb(255, 127, 14)";
   const DopingColor = "rgb(31, 119, 180)";
@@ -75,8 +104,26 @@ function App() {
     const yAxis = d3.axisLeft(yScale)
       .tickFormat(d3.timeFormat("%M:%S"));
 
-    const tooltip = d3
-      .select('#tooltip')
+    let tooltip = d3.select("body #tooltip");
+
+    if (tooltip.empty()) {
+      tooltip = d3.select('body')
+        .append('div')
+        .attr('id', 'tooltip')
+        .style('visibility', 'hidden')
+        .style('position', 'absolute')
+        .style('background-color', '#333')
+        .style('opacity', '0.8')
+        .style('color', '#fff')
+        .style('padding', '12px')
+        .style('border-radius', '8px')
+        .style('box-shadow', '0 0 10px rgba(0, 0, 0, 0.5)')
+        .style('font-family', 'Arial, sans-serif')
+        .style('font-size', '14px')
+        .style('line-height', '1.5')
+        .style('pointer-events', 'none');  
+  }
+
 
     const svg = d3
       .select("#scatterContainer")
@@ -99,23 +146,44 @@ function App() {
       .attr("class", "dot")
       .attr("data-xvalue", (d) => d.Year)
       .attr("data-yvalue", (d) => {return new Date(d.Seconds * 1000)})
+      
       .on('mouseover', (event, d)=> {
         tooltip.transition()
           .style('visibility', 'visible')
           .attr('data-year', d.Year)
           
-        tooltip.html(`<div >
-          <b>Doping:</b> ${d.Doping} <br />
-          <b>Name:</b> ${d.Name} <br />
-          <b>Place:</b> ${d.Place} <br />
-          <b>Nationality:</b> ${d.Nationality} <br />
-          <b>Seconds:</b> ${d.Secons} <br />
-          <b>Time:</b> ${d.Time} <br />
-          <b>Url:</b> ${d.URL} <br />
-          <b>Year:</b> ${d.Year} <br />
-          <br />
-        </div>`)
+          if (d.Doping) {
+            tooltip.html(`<div class="tooltip-content">
+                <b>Doping:</b> ${d.Doping} <br />
+                <b>Name:</b> ${d.Name} <br />
+                <b>Place:</b> ${d.Place} <br />
+                <b>Nationality:</b> ${d.Nationality} <br />
+                <b>Seconds:</b> ${d.Seconds} <br />
+                <b>Time:</b> ${d.Time} <br />
+                <b>Url:</b> ${d.URL} <br />
+                <b>Year:</b> ${d.Year} <br />
+                <br />
+            </div>`);
+        } else {
+            tooltip.html(`<div class="tooltip-content">
+                <b>Name:</b> ${d.Name} <br />
+                <b>Place:</b> ${d.Place} <br />
+                <b>Nationality:</b> ${d.Nationality} <br />
+                <b>Seconds:</b> ${d.Seconds} <br />
+                <b>Time:</b> ${d.Time} <br />
+                <b>Year:</b> ${d.Year} <br />
+                <br />
+            </div>`);
+        }
+        
+        tooltip.attr("data-year", d.Year)
+        .style("left", `${event.pageX + 10}px`)
+        .style("top", `${event.pageY - 28}px`);
       })
+      .on('mousemove', (event, d) => {
+        const [x, y] = d3.pointer(event);
+        tooltip.style('left', x + 'px').style('top', y + 'px');
+    })
       .on("mouseout", (event, d)=> {
         tooltip.transition()
         .style("visibility", "hidden")
@@ -138,16 +206,16 @@ function App() {
         .append("div")
         .attr("id", "legend")
         .html(
-          `<div style="border: 1px solid black; border-radius: 3px">
-            <div style="display: flex; align-items: center; margin-right: 0px; width: 100%;">
-              <p >No doping allegations  </p>
-              <div style="display: inline-block; width: 20px; height: 20px; background-color: orange;"></div>
+          `<div class="legend-box">
+            <div class="legend-item">
+              <div class="legend-color-box" style="background-color: rgb(255, 127, 14);"></div>
+              <p class="legend-text">No doping allegations</p>
             </div>
-            <div style="display: flex; align-items: center;">
-              <p>Riders with doping allegations</p>
-              <div style="display: inline-block; width: 20px; height: 20px; background-color: blue;"></div>
+            <div class="legend-item">
+              <div class="legend-color-box" style="background-color: rgb(31, 119, 180);"></div>
+              <p class="legend-text">Riders with doping allegations</p>
             </div>
-        </div>`
+          </div>`
         )
         .style("position", "absolute")
         .style("top", `${height/ 1.5}px`)
@@ -161,8 +229,7 @@ function App() {
       <h1 id="title">Doping in Professional Bicycle Racing</h1>
       <p id="subTitle">35 Fastest times up Alpe d'Huez</p>
       <div id="scatterContainer"></div>
-      <div id='tooltip'></div>
-      {/* <ApiRequestData /> */}
+      <ApiRequestData />
     </div>
   );
 }

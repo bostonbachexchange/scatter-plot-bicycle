@@ -218,9 +218,9 @@ function ApiRequestData() {
           </div>`
         )
         .style("position", "absolute")
-        .style("top", `${height/ 3}px`)
+        .style("top", `${height/ 4.2}px`)
         .style("left", `${width}px`)
-        .style("transform", `translate(-5%, -60%)`); 
+        .style("transform", `translate(-12%, -60%)`); 
 
   };
 

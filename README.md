@@ -2,6 +2,10 @@
 
 This is a React project that fetches cyclist data from a JSON file and visualizes it using a scatter plot. The data is sourced from [freeCodeCamp](https://www.freecodecamp.org/) and represents the 35 fastest times up Alpe d'Huez.
 
+## Deployed Application
+
+The application is deployed and can be accessed at [Deployed Link](https://bostonbachexchange.github.io/scatter-plot-bicycle/).
+
 ## Getting Started
 
 To run this project locally, follow these steps:
